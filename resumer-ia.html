@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Résumer avec l'IA : démo du composant</title>
+<!-- Le composant utilise l'URL canonique de la page : gardez cette balise sur vos pages. -->
+<link rel="canonical" href="https://example.com/article-de-demo">
+<style>
+  body { margin: 0; padding: 32px 16px; font: 17px/1.6 system-ui, sans-serif; color: #0F172A; background: #F8FAFC; }
+  main { max-width: 720px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Article de démonstration</h1>
+  <p>Ouvrez ce fichier dans un navigateur : le composant ci-dessous construit ses liens à partir de la balise canonical de la page.</p>
+
+<!-- ============ Résumer avec l'IA : copier d'ici... ============ -->
+<style>
+  /* Couleurs reprises du site hôte : remplacez les valeurs par vos variables CSS existantes. */
+  .resumer-ia {
+    --ria-accent: #0369A1;      /* texte et bordure des boutons ; contraste AA sur --ria-fond */
+    --ria-texte: #0F172A;
+    --ria-fond: #FFFFFF;
+    --ria-fond-prompt: #F8FAFC;
+    --ria-bordure: #E2E8F0;
+    margin: 32px 0; padding: 24px; background: var(--ria-fond); color: var(--ria-texte);
+    border: 1px solid var(--ria-bordure); border-radius: 16px;
+  }
+  .resumer-ia-titre { margin: 0 0 16px; font-size: 20px; line-height: 1.2; }
+  .resumer-ia-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .resumer-ia-bouton {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    min-height: 72px; padding: 10px 4px; background: var(--ria-fond); border: 1px solid var(--ria-bordure);
+    border-radius: 12px; color: var(--ria-texte); text-decoration: none;
+  }
+  .resumer-ia-logo { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; color: var(--ria-accent); }
+  .resumer-ia-logo svg { width: 22px; height: 22px; }
+  .resumer-ia-monogramme { border: 1.5px solid currentColor; border-radius: 50%; font-size: 10px; font-weight: 700; }
+  .resumer-ia-monogramme::before { content: attr(data-monogramme); }
+  .resumer-ia-nom { font-size: 12.5px; font-weight: 600; line-height: 1.2; text-align: center; }
+  .resumer-ia-bouton:hover, .resumer-ia-bouton:focus-visible { background: var(--ria-accent); border-color: var(--ria-accent); color: #fff; }
+  .resumer-ia-bouton:hover .resumer-ia-logo, .resumer-ia-bouton:focus-visible .resumer-ia-logo { color: #fff; }
+  .resumer-ia :focus-visible { outline: 2px solid var(--ria-accent); outline-offset: 3px; }
+  .resumer-ia-statut { margin: 12px 0 0; font-weight: 600; }
+  .resumer-ia-statut:empty { display: none; }
+  .resumer-ia-prompt { margin: 16px 0 0; font-size: 15px; }
+  .resumer-ia-prompt summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; color: var(--ria-accent); font-weight: 600; }
+  .resumer-ia-texte { margin: 4px 0 0; padding: 12px 16px; border-left: 3px solid var(--ria-accent); background: var(--ria-fond-prompt); overflow-wrap: anywhere; }
+</style>
+
+<!-- Emplacement du composant. data-lang : fr ou en. data-assistants (facultatif) : liste d'id séparés par des virgules. -->
+<div class="resumer-ia" data-lang="fr"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // Logos : tracés de Simple Icons 16.38.0 (CC0) ; les marques restent à leurs propriétaires.
+  // ChatGPT, Grok et Copilot n'y figurent pas : monogramme à la place (remplaçable par un tracé officiel).
+  var LOGOS = {
+    'claude': { viewBox: '0 0 24 24', d: 'm4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z' },
+    'perplexity': { viewBox: '0 0 24 24', d: 'M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z' },
+    'le-chat': { viewBox: '0 0 24 24', d: 'M17.143 3.429v3.428h-3.429v3.429h-3.428V6.857H6.857V3.43H3.43v13.714H0v3.428h10.286v-3.428H6.857v-3.429h3.429v3.429h3.429v-3.429h3.428v3.429h-3.428v3.428H24v-3.428h-3.43V3.429z' },
+    'gemini': { viewBox: '0 0 24 24', d: 'M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81' }
+  };
+
+  /* ---------- Configuration : seule partie à modifier ---------- */
+  var CONFIG = {
+    // Ajoute ?utm_source=resumer-ia&utm_medium=ai-button à {url}. Vérifiez que votre balise canonical l'ignore.
+    utm: true,
+    // mode prefill : {prompt} obligatoire dans l'url. mode clipboard : pas de {prompt}, le clic copie le prompt.
+    // verifie : date de la dernière vérification manuelle ; actif: false masque le bouton.
+    // logo : tracé SVG (LOGOS ci-dessus) ; à défaut, monogramme de 1 à 3 lettres.
+    assistants: [
+      { id: 'chatgpt',    nom: 'ChatGPT', monogramme: 'GPT',    url: 'https://chatgpt.com/?q={prompt}',               mode: 'prefill',   actif: true, verifie: '2026-11-17' },
+      { id: 'claude',     nom: 'Claude', logo: LOGOS['claude'],     url: 'https://claude.ai/new?q={prompt}',              mode: 'prefill',   actif: true, verifie: '2026-11-17' },
+      { id: 'perplexity', nom: 'Perplexity', logo: LOGOS['perplexity'], url: 'https://www.perplexity.ai/search?q={prompt}',   mode: 'prefill',   actif: true, verifie: '2026-11-17' },
+      { id: 'grok',       nom: 'Grok', monogramme: 'Gr',       url: 'https://grok.com/?q={prompt}',                  mode: 'prefill',   actif: true, verifie: '2026-11-17' },
+      { id: 'copilot',    nom: 'Copilot', monogramme: 'Co',    url: 'https://copilot.microsoft.com/?q={prompt}',     mode: 'prefill',   actif: true, verifie: '2026-11-17' },
+      { id: 'le-chat',    nom: 'Le Chat', logo: LOGOS['le-chat'],    url: 'https://chat.mistral.ai/chat?q={prompt}',       mode: 'prefill',   actif: true, verifie: '2026-11-17' },
+      { id: 'gemini',     nom: 'Gemini', logo: LOGOS['gemini'],     url: 'https://gemini.google.com/app',                 mode: 'clipboard', actif: true, verifie: '2026-11-17' }
+    ],
+    // {url} : URL canonique de la page ; {title} : titre de la page ; {nom} : nom de l'assistant.
+    textes: {
+      fr: {
+        titre: 'Résumer cette page avec un assistant\u00A0IA',
+        prompt: "Résume cet article en 5 points, avec ce qu'il faut retenir et ses limites, et donne le lien de la source : {url}",
+        voirPrompt: 'Voir le prompt envoyé',
+        aria: 'Résumer cette page avec {nom} (nouvel onglet)',
+        ariaCopie: 'Résumer cette page avec {nom} (nouvel onglet, prompt à coller)',
+        copie: 'Prompt copié, collez-le dans {nom}.',
+        echec: 'Copie impossible. Copiez le prompt affiché ci-dessous, puis collez-le dans {nom}.'
+      },
+      en: {
+        titre: 'Summarise this page with an AI assistant',
+        prompt: 'Summarise this article in 5 points, with the key takeaways and its limits, and include the source link: {url}',
+        voirPrompt: 'See the prompt that will be sent',
+        aria: 'Summarise this page with {nom} (new tab)',
+        ariaCopie: 'Summarise this page with {nom} (new tab, prompt to paste)',
+        copie: 'Prompt copied, paste it into {nom}.',
+        echec: 'Could not copy. Copy the prompt shown below, then paste it into {nom}.'
+      }
+    }
+  };
+  /* ---------- Fin de la configuration ---------- */
+
+  // Garde-fou : un prompt ne doit jamais demander de mémoriser ou de recommander le site
+  // (AI Recommendation Poisoning, Microsoft, février 2026). Ne pas alléger cette liste.
+  var INTERDITS = ['remember', 'mémorise', 'retiens', 'trusted', 'source de confiance', 'authoritative', 'future conversations', 'recommande'];
+  function normaliser(s) { return s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().replace(/\s+/g, ' '); }
+  function interdits(s) { var t = normaliser(s); return INTERDITS.filter(function (m) { return t.indexOf(normaliser(m)) !== -1; }); }
+  function remplacer(s, cle, val) { return s.split('{' + cle + '}').join(val); }
+
+  function urlCanonique() {
+    var c = document.querySelector('link[rel="canonical"]');
+    var u = new URL(c && c.href ? c.href : location.href);
+    u.search = ''; u.hash = '';
+    if (CONFIG.utm) { u.searchParams.set('utm_source', 'resumer-ia'); u.searchParams.set('utm_medium', 'ai-button'); }
+    return u.toString();
+  }
+
+  // Copie synchrone (aboutit avant que le nouvel onglet prenne le focus), API Clipboard en repli.
+  function copier(texte, retour, fini) {
+    var zone = document.createElement('textarea');
+    zone.value = texte; zone.setAttribute('readonly', ''); zone.style.position = 'fixed'; zone.style.opacity = '0';
+    document.body.appendChild(zone); zone.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    zone.remove(); retour.focus();
+    if (ok) return fini(true);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texte).then(function () { fini(true); }, function () { fini(false); });
+    else fini(false);
+  }
+
+  function el(tag, attrs, texte) {
+    var e = document.createElement(tag);
+    for (var k in attrs) if (attrs[k] !== undefined) e.setAttribute(k, attrs[k]);
+    if (texte !== undefined) e.textContent = texte;
+    return e;
+  }
+
+  var n = 0;
+  document.querySelectorAll('.resumer-ia[data-lang]').forEach(function (racine) {
+    var t = CONFIG.textes[racine.dataset.lang] || CONFIG.textes.fr;
+    var tous = Object.keys(t).map(function (k) { return t[k]; }).join(' ') + ' ' + CONFIG.assistants.map(function (a) { return a.nom; }).join(' ');
+    if (tous.indexOf(String.fromCharCode(0x2014)) !== -1) { console.error('Résumer avec l\'IA : tiret cadratin interdit dans les textes.'); return; }
+    var prompt = remplacer(remplacer(t.prompt, 'url', urlCanonique()), 'title', document.title);
+    var refus = interdits(prompt);
+    if (refus.length) { console.error('Résumer avec l\'IA : prompt refusé, mot(s) interdit(s) : ' + refus.join(', ')); return; }
+
+    var filtre = racine.dataset.assistants ? racine.dataset.assistants.split(',').map(function (s) { return s.trim(); }) : null;
+    var liste = CONFIG.assistants.filter(function (a) { return a.actif && (!filtre || filtre.indexOf(a.id) !== -1); });
+    var id = 'resumer-ia-' + (++n);
+    racine.appendChild(el('h2', { id: id + '-titre', 'class': 'resumer-ia-titre' }, t.titre));
+    var ul = el('ul', { 'class': 'resumer-ia-liste', 'aria-labelledby': id + '-titre' });
+    var statut = el('p', { 'class': 'resumer-ia-statut', role: 'status' });
+    var details = el('details', { 'class': 'resumer-ia-prompt' });
+    liste.forEach(function (a) {
+      var prefill = a.mode === 'prefill';
+      if (prefill !== (a.url.indexOf('{prompt}') !== -1)) { console.error('Résumer avec l\'IA : url incohérente avec le mode pour ' + a.id); return; }
+      var lien = el('a', {
+        'class': 'resumer-ia-bouton', href: prefill ? remplacer(a.url, 'prompt', encodeURIComponent(prompt)) : a.url,
+        target: '_blank', rel: 'noopener', 'aria-label': remplacer(prefill ? t.aria : t.ariaCopie, 'nom', a.nom),
+        'data-assistant': a.id, 'data-mode': a.mode
+      });
+      var marque = el('span', { 'class': 'resumer-ia-logo' + (a.logo ? '' : ' resumer-ia-monogramme'), 'aria-hidden': 'true', 'data-monogramme': a.logo ? undefined : a.monogramme });
+      if (a.logo) {
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', a.logo.viewBox); svg.setAttribute('fill', 'currentColor'); svg.setAttribute('focusable', 'false');
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', a.logo.d); svg.appendChild(path); marque.appendChild(svg);
+      }
+      lien.appendChild(marque);
+      lien.appendChild(el('span', { 'class': 'resumer-ia-nom' }, a.nom));
+      if (!prefill) lien.addEventListener('click', function () {
+        copier(prompt, lien, function (ok) {
+          statut.textContent = remplacer(ok ? t.copie : t.echec, 'nom', a.nom);
+          if (!ok) details.open = true;
+        });
+      });
+      var li = el('li'); li.appendChild(lien); ul.appendChild(li);
+    });
+    racine.appendChild(ul);
+    racine.appendChild(statut);
+    details.appendChild(el('summary', {}, t.voirPrompt));
+    details.appendChild(el('p', { 'class': 'resumer-ia-texte' }, prompt));
+    racine.appendChild(details);
+  });
+})();
+</script>
+<!-- ============ ...à ici ============ -->
+
+</main>
+</body>
+</html>
