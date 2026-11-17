@@ -48,3 +48,7 @@ Chaque bouton porte `data-assistant` et `data-mode` : votre outil d'analyse peut
 ## Tester
 
 Le protocole et la grille de relevé sont dans [TEST.md](TEST.md).
+
+## Licence
+
+Code sous licence [MIT](LICENSE). Les logos des assistants viennent de Simple Icons (CC0) et les marques restent à leurs propriétaires : la licence MIT ne couvre pas leur usage en tant que marques.
